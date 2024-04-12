@@ -4,9 +4,9 @@ tutorial
 open two terminals
 open server side first
 
-python server.py
+python3 server.py
 
-python client.py
+python3 client.py
 
 
 #press 5 to logout
