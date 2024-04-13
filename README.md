@@ -4,7 +4,7 @@ network socket project
 able to support multiple client
 
 tutorial
-open two terminals
+open multiple terminals
 open the server side first
 
 python3 server.py
