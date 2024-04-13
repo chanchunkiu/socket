@@ -1,11 +1,11 @@
 import socket
 import threading
 
-# Server configuration
+#server
 HOST = '127.0.0.1'
 PORT = 65432
 
-# User credentials
+# User
 users = {
     "apple": "apple123",
     "banana": "banana123",
@@ -14,7 +14,7 @@ users = {
     # Add other users as needed
 }
 
-# Placeholder for friends list
+#friends
 friends = {
     "apple": ["Banana", "Cherry"],
     "banana": ["alice"],
@@ -39,23 +39,25 @@ def handle_client(conn, addr):
             return
 
         while True:
-            # Main menu
+            # Main
             conn.sendall("Welcome to Message System\n----------------------\nPlease choose one of the following options:\n1. Manage your friend list\n2. Send message to your friend(s)\n3. Send file to your friend(s)\n4. View your messages and files\n5. Logout\nYour Option: ".encode())
             menu_choice = conn.recv(1024).decode().strip()
 
             if menu_choice == "1":
-                # Send submenu
+                #Friend
                 conn.sendall("Manage your friend list\n-----------------------\n1. View friends\n2. Add friend\n3. Remove friend\nYour Option: ".encode())
                 submenu_choice = conn.recv(1024).decode().strip()  # Ensure this recv is here to wait for the client's choice
                 # Process submenu choice
                 if submenu_choice == "1":
-                    friend_list = ", ".join(friends.get(user_id, []))
-                    conn.sendall(f"Your friends: {friend_list}\n".encode())
-                # Add handling for other submenu choices (e.g., Add friend, Remove friend)
+                    friend_list = friends.get(user_id, [])
+                    friend_list_formatted = "\n".join(friend_list)
+                    conn.sendall(f"View your friends\n------------------------------------\n{friend_list_formatted}".encode())
+                    # Wait for the client to signal that the user pressed Enter
+                    conn.recv(1024)
             elif menu_choice == "5":
-                # Process logout
+                #logout
                 conn.sendall("Logging out...\n".encode())
-                break  # Exit the loop to end the client session
+                break  #exit
     finally:
         print(f"Disconnected from {addr}")
         conn.close()

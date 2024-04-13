@@ -7,12 +7,13 @@ def main():
         s.connect((HOST, PORT))
         print("Connected to the server.")
 
-        # Login process
+        # Login 
         welcome_message = s.recv(1024).decode()
         print(welcome_message, end='')
-        user_id = input().strip()  # Strip input here
+        #username
+        user_id = input().strip() 
         s.sendall(user_id.encode())
-
+        #password
         password_prompt = s.recv(1024).decode()
         print(password_prompt, end='')
         password = input().strip()  # Strip input here
@@ -25,19 +26,20 @@ def main():
             # Main menu
             main_menu = s.recv(1024).decode()
             print(main_menu, end='')
-            main_menu_choice = input().strip()  # Strip input here
+            main_menu_choice = input().strip()  
             s.sendall(main_menu_choice.encode())
-
+            
+            # Process the user's choice
             if main_menu_choice == "1":
-                # Friend list management submenu
                 submenu = s.recv(1024).decode()
                 print(submenu, end='')
-                submenu_choice = input().strip()  # Strip input here
+                # Wait for the client to signal that the user pressed Enter
+                submenu_choice = input().strip() 
                 s.sendall(submenu_choice.encode())
-
-                # Response to submenu choice
                 submenu_response = s.recv(1024).decode()
                 print(submenu_response)
+                input("Press Enter to return to the previous menu...")
+                s.sendall("\n".encode())
             elif main_menu_choice == "5":
                 # Handle logout
                 logout_message = s.recv(1024).decode()
