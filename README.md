@@ -1,6 +1,8 @@
 # socket
 network socket project
+
 able to support multiple client
+
 tutorial
 open two terminals
 open the server side first
