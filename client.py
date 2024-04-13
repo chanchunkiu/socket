@@ -27,7 +27,7 @@ def main():
         # Receive authentication result
         auth_result = s.recv(1024).decode()
         print(auth_result)
-
+    
         # Handle server responses after authentication
         if "successful" in auth_result:
             while True:
