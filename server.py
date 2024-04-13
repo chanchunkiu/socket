@@ -9,56 +9,67 @@ PORT = 65432
 users = {
     "apple": "apple123",
     "banana": "banana123",
-    "jimmy": "jimmy123",
-    "mary": "mary123",
-    "user5": "password5",
-    "user6": "password6",
-    "user7": "password7",
-    "user8": "password8",
-    "user9": "password9",
-    "user10": "password10",
+    "cherry": "cherry123",
+    "alice": "alice123",
+    # Add other users as needed
+}
+
+# Placeholder for friends list
+friends = {
+    "apple": ["Banana", "Cherry"],
+    "banana": ["alice"],
+    "cherry": ["apple"]
+    # Add default friends for other users as needed
 }
 
 def handle_client(conn, addr):
     print(f"Connected by {addr}")
 
-    # Send welcome message and user ID prompt
-    conn.sendall("Welcome to Message System\nPlease login\nYour user ID: ".encode())
+    try:
+        conn.sendall("Welcome to Message System\nPlease login\nYour user ID: ".encode())
+        user_id = conn.recv(1024).decode().strip()
 
-    # Receive user ID from the client
-    user_id = conn.recv(1024).decode().strip()
-    print(f"Received user ID: {user_id}")
-
-    # Send password prompt if user ID is received
-    if user_id:
         conn.sendall("Your password: ".encode())
-
-        # Receive password from the client
         password = conn.recv(1024).decode().strip()
-        print(f"Received password: {password}")
 
-        # Authentication logic
         if user_id in users and users[user_id] == password:
-            # Send authentication result to the client
-            conn.sendall("Login successful!".encode())
+            conn.sendall("Login successful!\n".encode())
         else:
-            conn.sendall("Login failed. Please try again.".encode())
+            conn.sendall("Login failed. Please try again.\n".encode())
+            return
 
-    print(f"Disconnected from {addr}")
-    conn.close()
+        while True:
+            # Main menu
+            conn.sendall("Welcome to Message System\n----------------------\nPlease choose one of the following options:\n1. Manage your friend list\n2. Send message to your friend(s)\n3. Send file to your friend(s)\n4. View your messages and files\n5. Logout\nYour Option: ".encode())
+            menu_choice = conn.recv(1024).decode().strip()
+
+            if menu_choice == "1":
+                # Send submenu
+                conn.sendall("Manage your friend list\n-----------------------\n1. View friends\n2. Add friend\n3. Remove friend\nYour Option: ".encode())
+                submenu_choice = conn.recv(1024).decode().strip()  # Ensure this recv is here to wait for the client's choice
+                # Process submenu choice
+                if submenu_choice == "1":
+                    friend_list = ", ".join(friends.get(user_id, []))
+                    conn.sendall(f"Your friends: {friend_list}\n".encode())
+                # Add handling for other submenu choices (e.g., Add friend, Remove friend)
+            elif menu_choice == "5":
+                # Process logout
+                conn.sendall("Logging out...\n".encode())
+                break  # Exit the loop to end the client session
+    finally:
+        print(f"Disconnected from {addr}")
+        conn.close()
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((HOST, PORT))
         s.listen()
-
         print("Server is starting...")
+
         while True:
             conn, addr = s.accept()
-            # Start a new thread for each client
             client_thread = threading.Thread(target=handle_client, args=(conn, addr))
             client_thread.start()
-            print(f"Active connections: {threading.activeCount() - 1}")
 
 if __name__ == "__main__":
     main()
