@@ -18,3 +18,10 @@ careful dont enter new line when succeessfully login
 if not will error, me lazy to fix that
 
 #press 5 to logout
+
+
+also done question 2 3 and 4
+
+will stop here
+
+find me if need help
