@@ -4,12 +4,26 @@ import socket
 HOST = '127.0.0.1'
 PORT = 65432
 
+# User credentials
+users = {
+    "apple": "apple123",
+    "banana": "banana123",
+    "lemon": "lemon123",
+    "user4": "password4",
+    "user5": "password5",
+    "user6": "password6",
+    "user7": "password7",
+    "user8": "password8",
+    "user9": "password9",
+    "user10": "password10",
+}
+
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((HOST, PORT))
         s.listen()
 
-        print("Server is listening...")
+        print("Server is starting...")
         while True:
             conn, addr = s.accept()
             print(f"Connected by {addr}")
@@ -29,10 +43,12 @@ def main():
                 password = conn.recv(1024).decode().strip()
                 print(f"Received password: {password}")
 
-                # Authentication logic here
-
-                # Send authentication result to the client
-                conn.sendall("Login successful!".encode())
+                # Authentication logic
+                if user_id in users and users[user_id] == password:
+                    # Send authentication result to the client
+                    conn.sendall("Login successful!".encode())
+                else:
+                    conn.sendall("Login failed. Please try again.".encode())
 
             print(f"Disconnected from {addr}")
             conn.close()
