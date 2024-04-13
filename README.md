@@ -14,5 +14,7 @@ python3 client.py
 
 in server.py, can edit username and password
 
+careful dont enter new line when succeessfully login 
+if not will error, me lazy to fix that
 
 #press 5 to logout
