@@ -25,3 +25,7 @@ also done question 2 3 and 4
 will stop here
 
 find me if need help
+
+
+current result 
+![image](https://github.com/chanchunkiu/socket/assets/107382038/e6960e89-5157-4e95-bffc-01211c2dcaae)
